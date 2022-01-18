@@ -1,11 +1,12 @@
-package com.andres.rangel.quotesapp.view
+package com.andres.rangel.quotesapp.ui.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.andres.rangel.quotesapp.databinding.ActivityMainBinding
-import com.andres.rangel.quotesapp.viewmodel.QuoteViewModel
+import com.andres.rangel.quotesapp.ui.viewmodel.QuoteViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,9 +19,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        quoteViewModel.onCreate()
+
         quoteViewModel.quoteModel.observe(this, Observer { currentQuote ->
             binding.tvQuote.text = currentQuote.quote
             binding.tvAuthor.text = currentQuote.author
+        })
+
+        quoteViewModel.isLoading.observe(this, Observer { isLoading ->
+            binding.progress.isVisible = isLoading
         })
 
         binding.viewContainer.setOnClickListener { quoteViewModel.randomQuote() }
